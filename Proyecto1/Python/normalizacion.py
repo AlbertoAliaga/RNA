@@ -66,7 +66,7 @@ ciclos_max = 10
 
 output = np.dot(entrenamiento, peso)
 # print("Suma pesos: ",output[0])
-print("desired_output: ",desired_output[0][1])
+#print("desired_output: ",desired_output[0][0])
 
 output += zz
 # print("Umbral: ",zz)
@@ -78,20 +78,34 @@ output += zz
 
 # BUCLE DE PATRONES
 ii = 0
+#Lista vacía de errores para el MSE: (d - y)^2
+error = [0] * 721
 while ii < len(output):
   jj = 0
+  error[ii] = (desired_output[0][ii] - output[ii])**2
+  #print("Error ", ii, ": ", error[ii])
   while jj < 9:
     if jj < 8:
       a = 0
       # wj + ∇p * wj
-      print("jj: ",jj)
-      print(peso[0][jj])
+      #print("jj: ",jj)
+      #print(peso[0][jj])
       peso[0][jj] += learning_rate * (desired_output[0][ii] - output[ii]) * entrenamiento[jj][ii]
     else:
       # θ + ∇p * θ
       zz += learning_rate * (desired_output[0][ii] - output[ii])
     jj += 1
   ii += 1
+
+mse = 0
+#Suma todos los valores para el MSE
+for value in error:
+    mse += value
+#MSE = 1/N * suma(d - y)
+mse = mse / 721
+print("MSE ciclo 1: ", mse)
+
+#############################################Fin bucle ejecución#############################################
 
 print("Últimos pesos primer ciclo:")
 print(peso[0][0])

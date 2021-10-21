@@ -103,6 +103,7 @@ while ciclos < ciclos_max:
     #MSE = 1/N * suma(d - y)
     mse = mse / 721
     print("MSE ciclo 1: ", mse)
+    ciclos += 1
 
 #############################################Fin bucle ejecución#############################################
 

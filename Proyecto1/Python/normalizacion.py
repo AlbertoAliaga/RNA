@@ -22,13 +22,11 @@ for i in range(0, 8):  # normalización de los inputs
 
 # print(data_input)
 
-
 # randomización y división en porcentajes
 entrenamiento = data_input.sample(frac=0.7)
 validacion = data_input.drop(entrenamiento.index)
 test = validacion.sample(frac=0.5)
 validacion = validacion.drop(test.index)
-
 
 # print(entrenamiento)
 
@@ -64,24 +62,34 @@ ciclos_max = 2
 
 #############################################Bucle de ejecución#############################################
 
-output = np.dot(entrenamiento, peso)
-# print("Suma pesos: ",output[0])
-#print("desired_output: ",desired_output[0][0])
-
-output += zz
-# print("Umbral: ",zz)
-# print("Suma pesos y umbral: ",output[0])
-
 # BUCLE DE CICLOS
 ciclos = 0
 while ciclos < ciclos_max:
+    #Calculo entrenamiento cada ciclo
+    entrenamiento_output = np.dot(entrenamiento, peso)
+    # print("Output entrenamiento pesos: ",entrenamiento_output[0])
+    #print("desired_output: ",desired_output[0][0])
+
+    entrenamiento_output += zz
+    # print("Umbral: ",zz)
+    # print("Suma pesos y umbral entrenamiento: ",entrenamiento_output[0])
+
+    #Calculo validacion cada ciclo
+    validacion_output = np.dot(validacion, peso)
+    # print("Output validacion pesos: ",validacion_output[0])
+    #print("desired_output: ",desired_output[0][0])
+
+    validacion_output += zz
+    # print("Umbral: ",zz)
+    # print("Suma pesos y umbral validacion: ",validacion_output[0])
+
     # BUCLE DE PATRONES
     ii = 0
     #Lista vacía de errores para el MSE: (d - y)^2
-    error = [0] * 721
-    while ii < len(output):
+    error = []
+    while ii < len(entrenamiento_output):
       jj = 0
-      error[ii] = (desired_output[0][ii] - output[ii])**2
+      error.append((desired_output[0][ii] - entrenamiento_output[ii])**2)
       #print("Error ", ii, ": ", error[ii])
       while jj < 9:
         if jj < 8:
@@ -89,10 +97,10 @@ while ciclos < ciclos_max:
           # wj + ∇p * wj
           #print("jj: ",jj)
           #print(peso[0][jj])
-          peso[0][jj] += learning_rate * (desired_output[0][ii] - output[ii]) * entrenamiento[jj][ii]
+          peso[0][jj] += learning_rate * (desired_output[0][ii] - entrenamiento_output[ii]) * entrenamiento[jj][ii]
         else:
           # θ + ∇p * θ
-          zz += learning_rate * (desired_output[0][ii] - output[ii])
+          zz += learning_rate * (desired_output[0][ii] - entrenamiento_output[ii])
         jj += 1
       ii += 1
 
@@ -113,8 +121,12 @@ while ciclos < ciclos_max:
     for value in error:
         mse += value
     #MSE = 1/N * suma(d - y)
-    mse = mse / 721
+    mse = mse / len(entrenamiento_output)
     print("MSE ciclo ", ciclos, ": ", mse)
+    print()
+
+    ii = 0
+    error.clear()
 
     ciclos += 1
 

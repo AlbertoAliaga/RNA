@@ -60,7 +60,7 @@ peso = pd.DataFrame(peso).transpose()
 #############################################Hiperparámetros#############################################
 
 learning_rate = 0.1
-ciclos_max = 1
+ciclos_max = 2
 
 #############################################Bucle de ejecución#############################################
 
@@ -96,25 +96,26 @@ while ciclos < ciclos_max:
         jj += 1
       ii += 1
 
+    print("Ultimos pesos ciclo ", ciclos, ":")
+    print(peso[0][0])
+    print(peso[0][1])
+    print(peso[0][2])
+    print(peso[0][3])
+    print(peso[0][4])
+    print(peso[0][5])
+    print(peso[0][6])
+    print(peso[0][7])
+
+    print("Umbral ciclo ", ciclos, ": ", zz)
+
     mse = 0
     #Suma todos los valores para el MSE
     for value in error:
         mse += value
     #MSE = 1/N * suma(d - y)
     mse = mse / 721
-    print("MSE ciclo 1: ", mse)
+    print("MSE ciclo ", ciclos, ": ", mse)
+
     ciclos += 1
 
 #############################################Fin bucle ejecución#############################################
-
-print("Últimos pesos primer ciclo:")
-print(peso[0][0])
-print(peso[0][1])
-print(peso[0][2])
-print(peso[0][3])
-print(peso[0][4])
-print(peso[0][5])
-print(peso[0][6])
-print(peso[0][7])
-
-print("Umbral primer ciclo: ", zz)
